@@ -1,0 +1,34 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+body {
+  width: 100%;
+  background: black;
+}
+
+.main-l {
+  display: flex;
+  justify-content: center;
+}
+.spacing {
+  margin-right: 15px;
+  margin-top: 19px;
+}
+.notification-badge {
+  /* position: absolute; */
+  top: 0;
+  right: 0;
+  margin-bottom: 15px;
+  background-color: red;
+  color: white;
+  padding: 2px 5px;
+  border-radius: 50%;
+  font-size: 12px;
+}
