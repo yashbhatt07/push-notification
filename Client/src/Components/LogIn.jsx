@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoginSchema } from "./Schema/Schema";
 import { Button, Form } from "react-bootstrap";
-import axios from "axios";
 import _ from "lodash";
 import { login } from "./API/API";
 import { useNavigate } from "react-router-dom";
@@ -24,10 +23,6 @@ const LogIn = () => {
     LoginSchema.validate(data);
 
     const onLogin = await login(data);
-    console.log("🚀 ~ file: LogIn.jsx:27 ~ submit ~ onLogin:", onLogin);
-    console.log("🚀 ~ file: LogIn.jsx:24 ~ submit ~ onLogin:", onLogin);
-    localStorage.setItem("onLogin", JSON.stringify(onLogin));
-    console.log("🚀 ~ file: LogIn.jsx:29 ~ submit ~ onLogin:", onLogin);
 
     if (!_.isEmpty(onLogin)) {
       if (data.email === onLogin.email && data.password === onLogin.password) {
@@ -36,6 +31,8 @@ const LogIn = () => {
 
           return navigate("/superadmin");
         } else {
+          localStorage.setItem("onLogin", JSON.stringify(onLogin));
+
           return navigate(`/admin/${onLogin.id}`);
         }
       } else {

@@ -1,10 +1,12 @@
 import { socket } from "./SuperAdmin";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getNotification } from "../API/API";
+import { EditById, getNotification } from "../API/API";
 import profile from "../../assets/DummyProfile.webp";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Button,
   Container,
@@ -14,15 +16,41 @@ import {
   Offcanvas,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import { EditSchema } from "../Schema/Schema";
 const Admin = () => {
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm({ mode: "onChange", resolver: yupResolver(EditSchema) });
+
+  const current = JSON.parse(localStorage.getItem("onLogin"));
+  console.log("🚀 ~ file: Admin.jsx:29 ~ Admin ~ current:", current);
+
+  const [currentUser, setCurrentUser] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+  });
+  console.log("🚀 ~ file: Admin.jsx:27 ~ Admin ~ currentUser:", currentUser);
+
+  // const [editData, setEditData] = useState({
+  //   firstName: "",
+  //   lastNamee: "",
+  //   email: "",
+  // });
+  // console.log("🚀 ~ file: Admin.jsx:34 ~ Admin ~ editData:", editData);
+
   const [showEditModal, setShowEditModal] = useState(false);
   const [messages, setMessages] = useState([]);
   console.log("🚀 ~ file: Admin.jsx:12 ~ Admin ~ messages:", messages);
   const [notificationCount, setNotificationCount] = useState(0);
   const [show, setShow] = useState(false);
 
-  const closeHandler = () => setShowEditModal(false);
+  const closeHandler = () => {
+    setShowEditModal(false);
+    setCurrentUser(currentUser);
+  };
   const showHandler = () => setShowEditModal(true);
 
   const handleClose = () => setShow(false);
@@ -30,6 +58,17 @@ const Admin = () => {
     setNotificationCount(0);
     setShow(true);
   };
+
+  useEffect(() => {
+    if (current) {
+      setCurrentUser({
+        firstName: current.firstname,
+        lastName: current.lastname,
+        email: current.email,
+      });
+    }
+  }, []);
+
   useEffect(() => {
     getNotification()
       .then((TotelData) => {
@@ -52,7 +91,7 @@ const Admin = () => {
         });
       }
 
-      setMessages((prevMessages) => [data, ...prevMessages]);
+      setMessages((prevMessages) => [...prevMessages, data]);
       setNotificationCount((prevCount) => prevCount + 1);
     });
 
@@ -62,17 +101,29 @@ const Admin = () => {
     };
   }, [socket]);
 
-  useEffect(() => {
-    axios
-      .put("admins")
-      .then((res) => {
-        return res.data;
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }, []);
+  const sortedMessages = useMemo(
+    () => messages.sort((a, b) => a.timestamp - b.timestamp),
+    [messages]
+  );
+  console.log(
+    "🚀 ~ file: Admin.jsx:68 ~ Admin ~ sortedMessages:",
+    sortedMessages
+  );
 
+  const submitHandler = (data, event) => {
+    console.log("🚀 ~ file: Admin.jsx:114 ~ submitHandler ~ data:", data);
+    event.preventDefault();
+    const userId = current.id;
+    const updatedData = { ...current, ...data };
+    EditById(userId, updatedData)
+      .then((res) => {
+        console.log("Updated data:", res);
+      })
+      .catch((err) => {
+        console.error("Error updating data:", err);
+      });
+    closeHandler();
+  };
   return (
     <>
       <Navbar bg="light" data-bs-theme="light">
@@ -108,22 +159,32 @@ const Admin = () => {
         </Container>
       </Navbar>
 
-      <div style={{ color: "white", marginTop: "20px" }}>Admin</div>
+      <h3 style={{ color: "white", marginTop: "20px" }}>
+        {current.id === 1
+          ? "Admin 1"
+          : current.id === 2
+          ? "Admin 2"
+          : current.id === 3
+          ? "Admin 3"
+          : current.id === 4
+          ? "Admin 4"
+          : current.id === 5
+          ? "Admin 5"
+          : "Admin"}
+      </h3>
       <ToastContainer />
       <Offcanvas show={show} onHide={handleClose} placement="end">
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>Notifications</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          {messages.length > 0 ? (
-            messages
-              .sort((a, b) => b.timestamp - a.timestamp)
-              .map((message, index) => (
-                <div key={index}>
-                  <strong>{`Title: ${message.title}`}</strong>
-                  <p>{`Message: ${message.description}`}</p>
-                </div>
-              ))
+          {sortedMessages.length > 0 ? (
+            sortedMessages.map((message, index) => (
+              <div key={index}>
+                <strong>{`Title: ${message.title}`}</strong>
+                <p>{`Message: ${message.description}`}</p>
+              </div>
+            ))
           ) : (
             <p>No messages</p>
           )}
@@ -135,19 +196,35 @@ const Admin = () => {
           <Offcanvas.Title>Profile</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <Form>
+          <Form onSubmit={handleSubmit(submitHandler)}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>First Name</Form.Label>
-              <Form.Control type="text" placeholder="Enter email" />
+              <Form.Control
+                type="text"
+                placeholder="Enter email"
+                defaultValue={currentUser.firstName}
+                {...register("firstname")}
+              />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Last Name</Form.Label>
-              <Form.Control type="text" placeholder="Enter email" />
+              <Form.Control
+                type="text"
+                placeholder="Enter Last name"
+                defaultValue={currentUser.lastName}
+                {...register("lastname")}
+              />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
               <Form.Label>Email</Form.Label>
-              <Form.Control type="email" placeholder="Password" />
+              <Form.Control
+                type="email"
+                placeholder="email"
+                defaultValue={currentUser.email}
+                {...register("email")}
+              />
+              <span className="text-danger"> {errors.email?.message}</span>
             </Form.Group>
 
             <Button variant="primary" type="submit">
@@ -156,7 +233,7 @@ const Admin = () => {
             <Button
               variant="primary"
               className="mx-2"
-              type="submit"
+              type="button"
               onClick={closeHandler}
             >
               Cancel

@@ -7,21 +7,21 @@
       "id": 6
     },
     {
-      "firstname": "admin",
-      "lastname": "1",
+      "firstname": "admin1111aa1dsdsdsdsdsdsds",
+      "lastname": "11",
       "email": "admin1@gmail.com",
       "password": "admin111",
       "role": "admin",
-      "status": false,
+      "status": true,
       "id": 1
     },
     {
-      "firstname": "admin",
+      "firstname": "adminaaassa",
       "lastname": "2",
       "email": "admin2@gmail.com",
       "password": "admin222",
       "role": "admin",
-      "status": false,
+      "status": true,
       "id": 2
     },
     {
@@ -30,7 +30,7 @@
       "email": "admin3@gmail.com",
       "password": "admin333",
       "role": "admin",
-      "status": false,
+      "status": true,
       "id": 3
     },
     {
@@ -39,7 +39,7 @@
       "email": "admin4@gmail.com",
       "password": "admin444",
       "role": "admin",
-      "status": false,
+      "status": true,
       "id": 4
     },
     {
@@ -48,33 +48,26 @@
       "email": "admin5@gmail.com",
       "password": "admin555",
       "role": "admin",
-      "status": false,
+      "status": true,
       "id": 5
     }
   ],
   "notification": [
     {
-      "title": "first message",
-      "description": "yash bhatt",
+      "title": "yash bhatt",
+      "description": "sasas",
+      "adminPath": [
+        1
+      ],
       "id": 1
     },
     {
-      "title": "cx",
-      "description": "xcxc",
-      "adminPath": 1,
+      "title": "yash bhatt",
+      "description": "y",
+      "adminPath": [
+        1
+      ],
       "id": 2
-    },
-    {
-      "title": "yash bhatt",
-      "description": "rer",
-      "adminPath": 1,
-      "id": 3
-    },
-    {
-      "title": "yash bhatt",
-      "description": "dadsd",
-      "adminPath": 1,
-      "id": 4
     }
   ]
 }

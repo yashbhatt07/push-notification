@@ -14,7 +14,7 @@ export const login = async (data) => {
 
 export const allAdmins = async () => {
   return await axios
-    .get("admins")
+    .get(`admins`)
     .then((res) => {
       console.log("🚀 ~ file: API.js:19 ~ .then ~ res:", res.data);
       return res.data;
@@ -43,5 +43,29 @@ export const getNotification = async () => {
     })
     .catch((error) => {
       console.log("this is error", error);
+    });
+};
+
+export const updateStatus = async (id, admin) => {
+  return await axios
+    .put(`admins/${id}`, admin)
+    .then((res) => {
+      console.log("🚀 ~ file: API.js:53 ~ .then ~ res:");
+      return res.data;
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
+
+export const EditById = async (id, data) => {
+  console.log("🚀 ~ file: API.js:62 ~ EditById ~ data:", data);
+  return await axios
+    .put(`admins/${id}`, data)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.error(err);
     });
 };

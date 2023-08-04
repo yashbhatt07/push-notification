@@ -22,3 +22,9 @@ export const LoginSchema = yup.object().shape({
   //   .required("description is required")
   //   .min(6, "description must be at least 8 characters"),
 });
+
+export const EditSchema = yup.object().shape({
+  firstname: yup.string().required("FirstName is required"),
+  lastname: yup.string().required("LastName is required"),
+  email: yup.string().matches(emailRegex, "Invalid email format"),
+});
