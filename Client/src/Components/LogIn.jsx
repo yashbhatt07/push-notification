@@ -31,7 +31,7 @@ const LogIn = () => {
 
           return navigate("/superadmin");
         } else {
-          localStorage.setItem("onLogin", JSON.stringify(onLogin));
+          localStorage.setItem(onLogin.id+"_onLogin", JSON.stringify(onLogin));
 
           return navigate(`/admin/${onLogin.id}`);
         }
@@ -81,7 +81,7 @@ const LogIn = () => {
             {...register("email")}
           />
           <span className="text-danger" style={{ marginLeft: "43px" }}>
-            {errors.email?.message}
+            {/* {errors.email.message} */}
           </span>
         </Form.Group>
         <Form.Group
@@ -100,7 +100,7 @@ const LogIn = () => {
             {...register("password")}
           />
           <span className="text-danger" style={{ marginLeft: "43px" }}>
-            {errors.password?.message}
+            {/* {errors.password.message} */}
           </span>
         </Form.Group>
         <span className="text-danger my-2">{error}</span>

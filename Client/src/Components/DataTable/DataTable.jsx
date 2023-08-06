@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Form, Table } from "react-bootstrap";
-import { allAdmins, login, updateStatus } from "../API/API";
+import { allAdmins,updateStatus } from "../API/API";
 
 const DataTable = ({ selectedAdmins, setSelectedAdmins }) => {
   const [admins, setAdmins] = useState([]);
@@ -15,11 +15,11 @@ const DataTable = ({ selectedAdmins, setSelectedAdmins }) => {
     fetchAdmins();
   }, []);
   useEffect(() => {
-    const currentAdmin = async () => {
-      const loginData = await login();
-      setAdmins(loginData);
-    };
-    currentAdmin();
+    // const currentAdmin = async () => {
+    //   const loginData = JS;
+    //   setAdmins(loginData);
+    // };
+    // currentAdmin();
   }, [admins]);
 
   const filteredUsersData = useMemo(
@@ -41,7 +41,6 @@ const DataTable = ({ selectedAdmins, setSelectedAdmins }) => {
         status: !currentStatus,
       };
 
-      // Call the API to update the status in the JSON data.
       updateStatus(id, updatedAdmin)
         .then(() => {
           setAdmins((prevState) =>
@@ -50,7 +49,6 @@ const DataTable = ({ selectedAdmins, setSelectedAdmins }) => {
             )
           );
 
-          // Update the selectedAdmins state based on the updated admin's status.
           if (!currentStatus) {
             setSelectedAdmins((prevSelectedAdmins) => [
               ...prevSelectedAdmins,

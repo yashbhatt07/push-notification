@@ -7,7 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
 import { notificationAPI } from "../API/API";
-import DataTable from "../DataTable/DataTable";
+import DataTable from '../DataTable/DataTable'
 export const socket = io.connect("http://localhost:5175");
 
 const SuperAdmin = () => {
@@ -15,7 +15,7 @@ const SuperAdmin = () => {
   const [messageDescription, setMessageDescription] = useState("");
   const [titleError, setTitleError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
-  const [selectedAdmins, setSelectedAdmins] = useState([]);
+  const [selectedAdmins, setSelectedAdmins] = useState([1,2,3,4,5]);
   const [messageData, setMessageData] = useState({
     title: "",
     description: "",
@@ -101,45 +101,6 @@ const SuperAdmin = () => {
             onSubmit={sendMessage}
             style={{ width: "300px", margin: "auto" }}
           >
-            {/* <div
-              className="d-flex text-white gap-2 "
-              style={{
-                backgroundColor: "rgb(23 26 26)",
-                padding: "5px 16px",
-                width: "100%",
-              }}
-            >
-              <Form.Check
-                type="switch"
-                label="1"
-                onChange={() => handleAdminSelection(1)}
-                checked={selectedAdmins.includes(1)}
-              />
-              <Form.Check
-                type="switch"
-                label="2"
-                onChange={() => handleAdminSelection(2)}
-                checked={selectedAdmins.includes(2)}
-              />
-              <Form.Check
-                type="switch"
-                label="3"
-                onChange={() => handleAdminSelection(3)}
-                checked={selectedAdmins.includes(3)}
-              />
-              <Form.Check
-                type="switch"
-                label="4"
-                onChange={() => handleAdminSelection(4)}
-                checked={selectedAdmins.includes(4)}
-              />
-              <Form.Check
-                type="switch"
-                label="5"
-                onChange={() => handleAdminSelection(5)}
-                checked={selectedAdmins.includes(5)}
-              />
-            </div> */}
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label className="text-white">Title</Form.Label>
               <Form.Control

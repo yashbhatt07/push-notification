@@ -2,10 +2,10 @@ import { socket } from "./SuperAdmin";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { EditById, getNotification } from "../API/API";
-import profile from "../../assets/DummyProfile.webp";
+// import profile from "../../assets/DummyProfile.webp";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-
+import { useParams } from 'react-router-dom'
 import { useEffect, useMemo, useState } from "react";
 import {
   Button,
@@ -23,8 +23,8 @@ const Admin = () => {
     register,
     formState: { errors },
   } = useForm({ mode: "onChange", resolver: yupResolver(EditSchema) });
-
-  const current = JSON.parse(localStorage.getItem("onLogin"));
+  const params = useParams();
+  const current = JSON.parse(localStorage.getItem(params.id+"_onLogin"));
   console.log("🚀 ~ file: Admin.jsx:29 ~ Admin ~ current:", current);
 
   const [currentUser, setCurrentUser] = useState({
@@ -46,7 +46,6 @@ const Admin = () => {
   console.log("🚀 ~ file: Admin.jsx:12 ~ Admin ~ messages:", messages);
   const [notificationCount, setNotificationCount] = useState(0);
   const [show, setShow] = useState(false);
-
   const closeHandler = () => {
     setShowEditModal(false);
     setCurrentUser(currentUser);
@@ -73,16 +72,23 @@ const Admin = () => {
     getNotification()
       .then((TotelData) => {
         console.log("🚀 ~ file: Admin.jsx:23 ~ .then ~ data:", TotelData);
-        setMessages(TotelData);
+        if(TotelData!=undefined){
+          setMessages(TotelData);
+        }
       })
       .catch((e) => {
         console.log(e);
       });
 
     socket.on("receive_message", (data) => {
+      
+      let id= params.id;
+      console.log(id)
+      const onLogin = JSON.parse(localStorage.getItem(id+"_onLogin"));
+      console.log(onLogin)
       console.log("🚀 ~ file: Admin.jsx:30 ~ socket.on ~ data:", data);
-      const onLogin = JSON.parse(localStorage.getItem("onLogin"));
-      if (parseInt(onLogin.id) == data.adminPath) {
+      // const onLogin = JSON.parse(localStorage.getItem("onLogin"));
+      if (parseInt(onLogin.id) == data.adminPath && onLogin.status==true) {
         toast.success(`title:${data.title},message:${data.description}`, {
           position: "top-center",
           autoClose: 3000,
@@ -100,15 +106,6 @@ const Admin = () => {
       socket.disconnect();
     };
   }, [socket]);
-
-  const sortedMessages = useMemo(
-    () => messages.sort((a, b) => a.timestamp - b.timestamp),
-    [messages]
-  );
-  console.log(
-    "🚀 ~ file: Admin.jsx:68 ~ Admin ~ sortedMessages:",
-    sortedMessages
-  );
 
   const submitHandler = (data, event) => {
     console.log("🚀 ~ file: Admin.jsx:114 ~ submitHandler ~ data:", data);
@@ -154,11 +151,11 @@ const Admin = () => {
                 Logout
               </Button>
             </Link>
-            <img src={profile} width={50} alt="profile" onClick={showHandler} />
+            {/* <img src={profile} width={50} alt="profile" onClick={showHandler} /> */}
           </Nav>
         </Container>
       </Navbar>
-
+{/* 
       <h3 style={{ color: "white", marginTop: "20px" }}>
         {current.id === 1
           ? "Admin 1"
@@ -171,15 +168,15 @@ const Admin = () => {
           : current.id === 5
           ? "Admin 5"
           : "Admin"}
-      </h3>
+      </h3> */}
       <ToastContainer />
       <Offcanvas show={show} onHide={handleClose} placement="end">
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>Notifications</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          {sortedMessages.length > 0 ? (
-            sortedMessages.map((message, index) => (
+          {messages.length > 0 ? (
+            [...messages].reverse().map((message, index) => (
               <div key={index}>
                 <strong>{`Title: ${message.title}`}</strong>
                 <p>{`Message: ${message.description}`}</p>
