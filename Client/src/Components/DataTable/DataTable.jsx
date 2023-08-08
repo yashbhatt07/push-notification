@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Form, Table } from "react-bootstrap";
 import { allAdmins, updateStatus } from "../API/API";
 
-const DataTable = ({ selectedAdmins, setSelectedAdmins }) => {
+const DataTable = () => {
   const [admins, setAdmins] = useState([]);
   console.log("🚀 ~ file: DataTable.jsx:7 ~ DataTable ~ admins:", admins);
   localStorage.setItem("admins", JSON.stringify(admins));
@@ -29,9 +29,9 @@ const DataTable = ({ selectedAdmins, setSelectedAdmins }) => {
 
   const handleToggleStatus = (
     id,
-    currentStatus,
-    selectedAdmins,
-    setSelectedAdmins
+    currentStatus
+    // selectedAdmins,
+    // setSelectedAdmins
   ) => {
     const adminToUpdate = admins.find((admin) => admin.id === id);
 
@@ -49,16 +49,16 @@ const DataTable = ({ selectedAdmins, setSelectedAdmins }) => {
             )
           );
 
-          if (!currentStatus) {
-            setSelectedAdmins((prevSelectedAdmins) => [
-              ...prevSelectedAdmins,
-              id,
-            ]);
-          } else {
-            setSelectedAdmins((prevSelectedAdmins) =>
-              prevSelectedAdmins.filter((adminId) => adminId !== id)
-            );
-          }
+          // if (!currentStatus) {
+          //   setSelectedAdmins((prevSelectedAdmins) => [
+          //     ...prevSelectedAdmins,
+          //     id,
+          //   ]);
+          // } else {
+          //   setSelectedAdmins((prevSelectedAdmins) =>
+          //     prevSelectedAdmins.filter((adminId) => adminId !== id)
+          //   );
+          // }
           const onLoginData = JSON.parse(localStorage.getItem(id + "_onLogin"));
           console.log(
             "🚀 ~ file: DataTable.jsx:63 ~ .then ~ onLoginData:",
@@ -105,9 +105,9 @@ const DataTable = ({ selectedAdmins, setSelectedAdmins }) => {
                   onChange={() =>
                     handleToggleStatus(
                       admin.id,
-                      admin.status,
-                      selectedAdmins,
-                      setSelectedAdmins
+                      admin.status
+                      // selectedAdmins,
+                      // setSelectedAdmins
                     )
                   }
                 />

@@ -8,36 +8,27 @@ import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
 import { notificationAPI } from "../API/API";
 import DataTable from "../DataTable/DataTable";
-import { useParams } from "react-router-dom";
 
 export const socket = io.connect("http://localhost:5175");
 
 const SuperAdmin = () => {
-  const params = useParams();
-
-  let onLogin = JSON.parse(localStorage.getItem(params.id + "__onLogin"));
-
   const [messageTitle, setMessageTitle] = useState("");
   const [messageDescription, setMessageDescription] = useState("");
   const [titleError, setTitleError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
-  const [selectedAdmins, setSelectedAdmins] = useState([]);
+  // const [selectedAdmins, setSelectedAdmins] = useState([]);
   const [messageData, setMessageData] = useState({
     title: "",
     description: "",
     adminPath: [],
   });
 
-  console.log(
-    "🚀 ~ file: SuperAdmin.jsx:18 ~ SuperAdmin ~ selectedAdmins:",
-    selectedAdmins
-  );
   useEffect(() => {
     setMessageData({
       title: messageTitle,
       description: messageDescription,
     });
-  }, [messageTitle, messageDescription, selectedAdmins]);
+  }, [messageTitle, messageDescription]);
 
   // const handleAdminSelection = (admin) => {
   //   if (selectedAdmins.includes(admin)) {
@@ -68,17 +59,17 @@ const SuperAdmin = () => {
         theme: "light",
       });
 
-      Email.send({
-        SecureToken: "a971eb7f-5f97-4762-a0dc-2484e24509a4",
-        To: "testwings121221@gmail.com",
-        From: "testwings121221@gmail.com",
-        Subject: messageTitle,
-        Body: messageDescription,
-      }).then((message) => {
-        console.log(message);
+      // Email.send({
+      //   SecureToken: "a971eb7f-5f97-4762-a0dc-2484e24509a4",
+      //   To: "testwings121221@gmail.com",
+      //   From: "testwings121221@gmail.com",
+      //   Subject: messageTitle,
+      //   Body: messageDescription,
+      // }).then((message) => {
+      //   console.log(message);
 
-        alert(message);
-      });
+      //   alert(message);
+      // });
       setMessageDescription("");
       setMessageTitle("");
       setDescriptionError("");
@@ -148,8 +139,8 @@ const SuperAdmin = () => {
         </div>
         <div style={{ width: "50%", margin: "80px 0 0 0" }}>
           <DataTable
-            selectedAdmins={selectedAdmins}
-            setSelectedAdmins={setSelectedAdmins}
+          // selectedAdmins={selectedAdmins}
+          // setSelectedAdmins={setSelectedAdmins}
           />
         </div>
       </div>

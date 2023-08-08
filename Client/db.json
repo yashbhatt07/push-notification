@@ -7,12 +7,12 @@
       "id": 6
     },
     {
-      "firstname": "admin",
-      "lastname": "111",
+      "firstname": "admina yash",
+      "lastname": "11",
       "email": "admin1@gmail.com",
       "password": "admin111",
       "role": "admin",
-      "status": false,
+      "status": true,
       "id": 1
     },
     {
@@ -39,7 +39,7 @@
       "email": "admin4@gmail.com",
       "password": "admin444",
       "role": "admin",
-      "status": false,
+      "status": true,
       "id": 4
     },
     {
@@ -48,40 +48,35 @@
       "email": "admin5@gmail.com",
       "password": "admin555",
       "role": "admin",
-      "status": false,
+      "status": true,
       "id": 5
     }
   ],
   "notification": [
     {
-      "title": "yash bhatt",
-      "description": "1",
+      "title": "Name",
+      "description": "Yash Bhatt",
       "id": 1
     },
     {
-      "title": "yash bhatt",
+      "title": "2",
       "description": "2",
       "id": 2
     },
     {
       "title": "yash bhatt",
-      "description": "only send to 1",
+      "description": "wqwqw",
       "id": 3
     },
     {
       "title": "yash bhatt",
-      "description": "1 5",
+      "description": "1 to 5",
       "id": 4
     },
     {
       "title": "yash bhatt",
-      "description": ".,.,., ,.,,m",
+      "description": "fgfg",
       "id": 5
-    },
-    {
-      "title": ",m,m",
-      "description": ",m,m",
-      "id": 6
     }
   ]
 }

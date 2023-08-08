@@ -17,6 +17,7 @@ import {
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { EditSchema } from "../Schema/Schema";
+import NavBar from "../Navbar/NavBar";
 const Admin = () => {
   const params = useParams();
   const current = JSON.parse(localStorage.getItem(params.id + "__onLogin"));
@@ -132,9 +133,16 @@ const Admin = () => {
       });
     closeHandler();
   };
+
   return (
     <>
-      <Navbar bg="light" data-bs-theme="light">
+      <NavBar
+        showHandler={showHandler}
+        notificationCount={notificationCount}
+        handleShow={handleShow}
+        profile={profile}
+      />
+      {/* <Navbar bg="light" data-bs-theme="light">
         <Container>
           <Navbar.Brand href="#home">Navbar</Navbar.Brand>
           <Nav
@@ -165,9 +173,8 @@ const Admin = () => {
             <img src={profile} width={50} alt="profile" onClick={showHandler} />
           </Nav>
         </Container>
-      </Navbar>
-
-      <h3 style={{ color: "white", marginTop: "20px" }}>
+      </Navbar> */}
+      {/* <h3 style={{ color: "white", marginTop: "20px" }}>
         {current.id === 1
           ? "Admin 1"
           : current.id === 2
@@ -179,7 +186,8 @@ const Admin = () => {
           : current.id === 5
           ? "Admin 5"
           : "Admin"}
-      </h3>
+      </h3> */}
+
       <ToastContainer />
       <Offcanvas show={show} onHide={handleClose} placement="end">
         <Offcanvas.Header closeButton>
@@ -201,7 +209,19 @@ const Admin = () => {
 
       <Offcanvas show={showEditModal} onHide={closeHandler} placement="end">
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Profile</Offcanvas.Title>
+          <Offcanvas.Title>
+            {current.id === 1
+              ? "Admin 1"
+              : current.id === 2
+              ? "Admin 2"
+              : current.id === 3
+              ? "Admin 3"
+              : current.id === 4
+              ? "Admin 4"
+              : current.id === 5
+              ? "Admin 5"
+              : "Admin"}
+          </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
           <Form onSubmit={handleSubmit(submitHandler)}>
