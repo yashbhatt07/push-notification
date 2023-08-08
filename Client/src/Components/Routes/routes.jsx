@@ -1,9 +1,8 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import LogIn from "../Login";
+import LogIn from "../LogIn";
+import SuperAdmin from "../DashBoard/SuperAdmin";
 import Admin from "../DashBoard/Admin";
-import SuperAdmin from "../Dashboard/SuperAdmin";
-
 const Public = () => {
   return (
     <Routes>

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Form, Table } from "react-bootstrap";
-import { allAdmins,updateStatus } from "../API/API";
+import { allAdmins, updateStatus } from "../API/API";
 
 const DataTable = ({ selectedAdmins, setSelectedAdmins }) => {
   const [admins, setAdmins] = useState([]);
@@ -58,6 +58,15 @@ const DataTable = ({ selectedAdmins, setSelectedAdmins }) => {
             setSelectedAdmins((prevSelectedAdmins) =>
               prevSelectedAdmins.filter((adminId) => adminId !== id)
             );
+          }
+          const onLoginData = JSON.parse(localStorage.getItem(id + "_onLogin"));
+          console.log(
+            "🚀 ~ file: DataTable.jsx:63 ~ .then ~ onLoginData:",
+            onLoginData
+          );
+          if (onLoginData) {
+            onLoginData.status = !currentStatus;
+            localStorage.setItem(id + "__onLogin", JSON.stringify(onLoginData));
           }
         })
         .catch((error) => {

@@ -2,10 +2,10 @@ import { socket } from "./SuperAdmin";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { EditById, getNotification } from "../API/API";
-// import profile from "../../assets/DummyProfile.webp";
+import profile from "../../assets/DummyProfile.webp";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useParams } from 'react-router-dom'
+import { useParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import {
   Button,
@@ -18,13 +18,8 @@ import {
 import { Link } from "react-router-dom";
 import { EditSchema } from "../Schema/Schema";
 const Admin = () => {
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm({ mode: "onChange", resolver: yupResolver(EditSchema) });
   const params = useParams();
-  const current = JSON.parse(localStorage.getItem(params.id+"_onLogin"));
+  const current = JSON.parse(localStorage.getItem(params.id + "__onLogin"));
   console.log("🚀 ~ file: Admin.jsx:29 ~ Admin ~ current:", current);
 
   const [currentUser, setCurrentUser] = useState({
@@ -33,6 +28,17 @@ const Admin = () => {
     email: "",
   });
   console.log("🚀 ~ file: Admin.jsx:27 ~ Admin ~ currentUser:", currentUser);
+
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    mode: "onChange",
+    resolver: yupResolver(EditSchema),
+    defaultValue: currentUser,
+  });
 
   // const [editData, setEditData] = useState({
   //   firstName: "",
@@ -43,7 +49,6 @@ const Admin = () => {
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [messages, setMessages] = useState([]);
-  console.log("🚀 ~ file: Admin.jsx:12 ~ Admin ~ messages:", messages);
   const [notificationCount, setNotificationCount] = useState(0);
   const [show, setShow] = useState(false);
   const closeHandler = () => {
@@ -64,15 +69,20 @@ const Admin = () => {
         firstName: current.firstname,
         lastName: current.lastname,
         email: current.email,
+        id: current.id,
       });
-    }
-  }, []);
 
+      setValue("firstname", current.firstname);
+      setValue("lastname", current.lastname);
+      setValue("email", current.email);
+    }
+  }, [setValue]);
+  console.log(currentUser);
   useEffect(() => {
     getNotification()
       .then((TotelData) => {
         console.log("🚀 ~ file: Admin.jsx:23 ~ .then ~ data:", TotelData);
-        if(TotelData!=undefined){
+        if (TotelData != undefined) {
           setMessages(TotelData);
         }
       })
@@ -81,14 +91,12 @@ const Admin = () => {
       });
 
     socket.on("receive_message", (data) => {
-      
-      let id= params.id;
-      console.log(id)
-      const onLogin = JSON.parse(localStorage.getItem(id+"_onLogin"));
-      console.log(onLogin)
-      console.log("🚀 ~ file: Admin.jsx:30 ~ socket.on ~ data:", data);
-      // const onLogin = JSON.parse(localStorage.getItem("onLogin"));
-      if (parseInt(onLogin.id) == data.adminPath && onLogin.status==true) {
+      let id = params.id;
+      console.log(id);
+      const onLogin = JSON.parse(localStorage.getItem(id + "__onLogin"));
+      console.log("🚀 ~ file: Admin.jsx:87 ~ socket.on ~ onLogin:", onLogin);
+
+      if (onLogin.status === true) {
         toast.success(`title:${data.title},message:${data.description}`, {
           position: "top-center",
           autoClose: 3000,
@@ -110,8 +118,11 @@ const Admin = () => {
   const submitHandler = (data, event) => {
     console.log("🚀 ~ file: Admin.jsx:114 ~ submitHandler ~ data:", data);
     event.preventDefault();
+
     const userId = current.id;
     const updatedData = { ...current, ...data };
+    localStorage.setItem(params.id + "__onLogin", JSON.stringify(updatedData));
+
     EditById(userId, updatedData)
       .then((res) => {
         console.log("Updated data:", res);
@@ -151,11 +162,11 @@ const Admin = () => {
                 Logout
               </Button>
             </Link>
-            {/* <img src={profile} width={50} alt="profile" onClick={showHandler} /> */}
+            <img src={profile} width={50} alt="profile" onClick={showHandler} />
           </Nav>
         </Container>
       </Navbar>
-{/* 
+
       <h3 style={{ color: "white", marginTop: "20px" }}>
         {current.id === 1
           ? "Admin 1"
@@ -168,7 +179,7 @@ const Admin = () => {
           : current.id === 5
           ? "Admin 5"
           : "Admin"}
-      </h3> */}
+      </h3>
       <ToastContainer />
       <Offcanvas show={show} onHide={handleClose} placement="end">
         <Offcanvas.Header closeButton>
@@ -199,7 +210,6 @@ const Admin = () => {
               <Form.Control
                 type="text"
                 placeholder="Enter email"
-                defaultValue={currentUser.firstName}
                 {...register("firstname")}
               />
             </Form.Group>
@@ -208,7 +218,6 @@ const Admin = () => {
               <Form.Control
                 type="text"
                 placeholder="Enter Last name"
-                defaultValue={currentUser.lastName}
                 {...register("lastname")}
               />
             </Form.Group>
@@ -218,7 +227,6 @@ const Admin = () => {
               <Form.Control
                 type="email"
                 placeholder="email"
-                defaultValue={currentUser.email}
                 {...register("email")}
               />
               <span className="text-danger"> {errors.email?.message}</span>

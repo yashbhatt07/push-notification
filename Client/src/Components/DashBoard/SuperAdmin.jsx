@@ -7,19 +7,25 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
 import { notificationAPI } from "../API/API";
-import DataTable from '../DataTable/DataTable'
+import DataTable from "../DataTable/DataTable";
+import { useParams } from "react-router-dom";
+
 export const socket = io.connect("http://localhost:5175");
 
 const SuperAdmin = () => {
+  const params = useParams();
+
+  let onLogin = JSON.parse(localStorage.getItem(params.id + "__onLogin"));
+
   const [messageTitle, setMessageTitle] = useState("");
   const [messageDescription, setMessageDescription] = useState("");
   const [titleError, setTitleError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
-  const [selectedAdmins, setSelectedAdmins] = useState([1,2,3,4,5]);
+  const [selectedAdmins, setSelectedAdmins] = useState([]);
   const [messageData, setMessageData] = useState({
     title: "",
     description: "",
-    adminPath: [1, 2, 3, 4, 5],
+    adminPath: [],
   });
 
   console.log(
@@ -30,7 +36,6 @@ const SuperAdmin = () => {
     setMessageData({
       title: messageTitle,
       description: messageDescription,
-      adminPath: selectedAdmins,
     });
   }, [messageTitle, messageDescription, selectedAdmins]);
 
@@ -43,37 +48,36 @@ const SuperAdmin = () => {
   // };
   const sendMessage = (event) => {
     event.preventDefault();
-    // Email.send({
-    //   SecureToken: "a971eb7f-5f97-4762-a0dc-2484e24509a4",
-    //   To: "testwings121221@gmail.com",
-    //   From: "testwings121221@gmail.com",
-    //   Subject: messageTitle,
-    //   Body: messageDescription,
-    // }).then((message) => {
-    //   console.log(message);
 
-    //   alert(message);
-    // });
     if (messageTitle === "") {
       setTitleError("Please Enter Title");
     }
     if (messageDescription === "") {
       setDescriptionError("Please Enter Description");
     } else {
-      selectedAdmins.forEach((admin) => {
-        socket.emit("send_message", {
-          title: messageTitle,
-          description: messageDescription,
-          adminPath: admin,
-        });
-        notificationAPI(messageData);
+      socket.emit("send_message", {
+        title: messageTitle,
+        description: messageDescription,
       });
+      notificationAPI(messageData);
 
       toast.success("message successfully sent", {
         position: "top-right",
         autoClose: 3000,
         closeOnClick: true,
         theme: "light",
+      });
+
+      Email.send({
+        SecureToken: "a971eb7f-5f97-4762-a0dc-2484e24509a4",
+        To: "testwings121221@gmail.com",
+        From: "testwings121221@gmail.com",
+        Subject: messageTitle,
+        Body: messageDescription,
+      }).then((message) => {
+        console.log(message);
+
+        alert(message);
       });
       setMessageDescription("");
       setMessageTitle("");
