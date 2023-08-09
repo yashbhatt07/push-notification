@@ -6,7 +6,7 @@ const NavBar = ({ showHandler, notificationCount, handleShow, profile }) => {
   return (
     <Navbar bg="light" data-bs-theme="light">
       <Container>
-        <Navbar.Brand href="#home">Navbar</Navbar.Brand>
+        <Navbar.Brand href="#home">Admin Panel</Navbar.Brand>
         <Nav
           className="me-auto"
           style={{
@@ -30,7 +30,16 @@ const NavBar = ({ showHandler, notificationCount, handleShow, profile }) => {
               Logout
             </Button>
           </Link>
-          <img src={profile} width={50} alt="profile" onClick={showHandler} />
+          <div>
+            <img
+              className="img"
+              src={profile}
+              width={50}
+              alt="profile"
+              onClick={showHandler}
+            />
+            <span className="hide">Profile</span>
+          </div>
         </Nav>
       </Container>
     </Navbar>

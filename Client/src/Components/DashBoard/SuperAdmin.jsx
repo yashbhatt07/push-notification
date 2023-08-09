@@ -8,27 +8,41 @@ import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
 import { notificationAPI } from "../API/API";
 import DataTable from "../DataTable/DataTable";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { messageSchema } from "../Schema/Schema";
+import moment from "moment";
 
 export const socket = io.connect("http://localhost:5175");
 
 const SuperAdmin = () => {
-  const [messageTitle, setMessageTitle] = useState("");
-  const [messageDescription, setMessageDescription] = useState("");
-  const [titleError, setTitleError] = useState("");
-  const [descriptionError, setDescriptionError] = useState("");
-  // const [selectedAdmins, setSelectedAdmins] = useState([]);
-  const [messageData, setMessageData] = useState({
-    title: "",
-    description: "",
-    adminPath: [],
+  const {
+    handleSubmit,
+    register,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    mode: "onChange",
+    resolver: yupResolver(messageSchema),
   });
+  // const [messageTitle, setMessageTitle] = useState("");
+  // const [messageDescription, setMessageDescription] = useState("");
+  // const [titleError, setTitleError] = useState("");
+  // const [descriptionError, setDescriptionError] = useState("");
+  // const [selectedAdmins, setSelectedAdmins] = useState([]);
+  // const [messageData, setMessageData] = useState({
+  //   title: "",
+  //   description: "",
+  //   adminPath: [],
+  // });
 
-  useEffect(() => {
-    setMessageData({
-      title: messageTitle,
-      description: messageDescription,
-    });
-  }, [messageTitle, messageDescription]);
+  // useEffect(() => {
+  //   setMessageData({
+  //     title: messageTitle,
+  //     description: messageDescription,
+  //   });
+  // }, [messageTitle, messageDescription]);
 
   // const handleAdminSelection = (admin) => {
   //   if (selectedAdmins.includes(admin)) {
@@ -37,51 +51,42 @@ const SuperAdmin = () => {
   //     setSelectedAdmins([...selectedAdmins, admin]);
   //   }
   // };
-  const sendMessage = (event) => {
+  // Adding a new key to the form data
+
+  const sendMessage = (data, event) => {
+    const currentTime = moment().format("MMMM Do YYYY, h:mm:ss a");
     event.preventDefault();
+    setValue("sentAt", currentTime);
 
-    if (messageTitle === "") {
-      setTitleError("Please Enter Title");
-    }
-    if (messageDescription === "") {
-      setDescriptionError("Please Enter Description");
-    } else {
-      socket.emit("send_message", {
-        title: messageTitle,
-        description: messageDescription,
-      });
-      notificationAPI(messageData);
+    socket.emit("send_message", {
+      title: data.title,
+      description: data.description,
+      id: data.id,
+      sentAt: data.sentAt,
+    });
+    notificationAPI(data);
 
-      toast.success("message successfully sent", {
-        position: "top-right",
-        autoClose: 3000,
-        closeOnClick: true,
-        theme: "light",
-      });
-
-      // Email.send({
-      //   SecureToken: "a971eb7f-5f97-4762-a0dc-2484e24509a4",
-      //   To: "testwings121221@gmail.com",
-      //   From: "testwings121221@gmail.com",
-      //   Subject: messageTitle,
-      //   Body: messageDescription,
-      // }).then((message) => {
-      //   console.log(message);
-
-      //   alert(message);
-      // });
-      setMessageDescription("");
-      setMessageTitle("");
-      setDescriptionError("");
-      setTitleError("");
-    }
+    toast.success("message successfully sent", {
+      position: "top-right",
+      autoClose: 3000,
+      closeOnClick: true,
+      theme: "light",
+    });
+    // Email.send({
+    //   SecureToken: "a971eb7f-5f97-4762-a0dc-2484e24509a4",
+    //   To: "testwings121221@gmail.com",
+    //   From: "testwings121221@gmail.com",
+    //   Subject: data.title,
+    //   Body: data.description,
+    // }).then((message) => {
+    //   console.log(message);
+    //   alert(message);
+    // });
+    reset();
   };
 
   const clearHandler = () => {
-    setMessageDescription("");
-    setMessageTitle("");
-    setDescriptionError("");
-    setTitleError("");
+    reset();
   };
   return (
     <>
@@ -93,23 +98,21 @@ const SuperAdmin = () => {
           <h1 style={{ color: "white" }}>SuperAdmin</h1>
           <ToastContainer />
           <Form
-            onSubmit={sendMessage}
+            onSubmit={handleSubmit(sendMessage)}
             style={{ width: "300px", margin: "auto" }}
           >
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label className="text-white">Title</Form.Label>
               <Form.Control
-                value={messageTitle}
+                // value={messageTitle}
                 type="text"
-                onChange={(event) => {
-                  setMessageTitle(event.target.value);
-                }}
+                // onChange={(event) => {
+                //   setMessageTitle(event.target.value);
+                // }}
+                {...register("title")}
               />
-              {messageTitle.length > 0 ? (
-                ""
-              ) : (
-                <span className="text-danger d-flex">{titleError}</span>
-              )}
+
+              <span className="text-danger mt-1"> {errors.title?.message}</span>
             </Form.Group>
             <Form.Group
               className="mb-3"
@@ -118,18 +121,19 @@ const SuperAdmin = () => {
             >
               <Form.Label className="text-white">Message</Form.Label>
               <Form.Control
-                value={messageDescription}
-                onChange={(event) => {
-                  setMessageDescription(event.target.value);
-                }}
+                // value={messageDescription}
+                // onChange={(event) => {
+                //   setMessageDescription(event.target.value);
+                // }}
+                {...register("description")}
                 as="textarea"
                 rows={3}
               />
-              {messageDescription.length > 0 ? (
-                ""
-              ) : (
-                <span className="text-danger d-flex">{descriptionError}</span>
-              )}
+
+              <span className="text-danger mt-1">
+                {" "}
+                {errors.description?.message}
+              </span>
             </Form.Group>
             <Button className="mx-3" type="submit">
               Send Message

@@ -7,8 +7,8 @@
       "id": 6
     },
     {
-      "firstname": "admina yash",
-      "lastname": "11",
+      "firstname": "admina",
+      "lastname": "adminn",
       "email": "admin1@gmail.com",
       "password": "admin111",
       "role": "admin",
@@ -16,8 +16,8 @@
       "id": 1
     },
     {
-      "firstname": "admin",
-      "lastname": "2",
+      "firstname": "second admin",
+      "lastname": "devanshu",
       "email": "admin2@gmail.com",
       "password": "admin222",
       "role": "admin",
@@ -25,8 +25,8 @@
       "id": 2
     },
     {
-      "firstname": "admin",
-      "lastname": "3",
+      "firstname": "third admin",
+      "lastname": "mayank",
       "email": "admin3@gmail.com",
       "password": "admin333",
       "role": "admin",
@@ -34,49 +34,66 @@
       "id": 3
     },
     {
-      "firstname": "adminaaaaa",
-      "lastname": "4",
+      "firstname": "fourth admin",
+      "lastname": "mahendra",
       "email": "admin4@gmail.com",
       "password": "admin444",
       "role": "admin",
-      "status": true,
+      "status": false,
       "id": 4
     },
     {
-      "firstname": "admin",
-      "lastname": "5",
+      "firstname": "fifth admin",
+      "lastname": "chirag",
       "email": "admin5@gmail.com",
       "password": "admin555",
       "role": "admin",
-      "status": true,
+      "status": false,
       "id": 5
     }
   ],
   "notification": [
     {
-      "title": "Name",
-      "description": "Yash Bhatt",
+      "title": "hello everyone",
+      "description": "hello, i am yash bhatt",
+      "sentAt": "August 9th 2023, 4:05:32 pm",
       "id": 1
     },
     {
-      "title": "2",
-      "description": "2",
+      "title": "yasg",
+      "description": "fsdfdsfdfd",
+      "sentAt": "August 9th 2023, 4:06:45 pm",
       "id": 2
     },
     {
-      "title": "yash bhatt",
-      "description": "wqwqw",
+      "title": "yankdlsdkd",
+      "description": "dsdsadadasds",
+      "sentAt": "August 9th 2023, 4:09:14 pm",
       "id": 3
     },
     {
-      "title": "yash bhatt",
-      "description": "1 to 5",
+      "title": "fdsffd",
+      "description": "fdfdfd",
+      "sentAt": "August 9th 2023, 4:11:20 pm",
       "id": 4
     },
     {
-      "title": "yash bhatt",
-      "description": "fgfg",
+      "title": "qewewewq",
+      "description": "ewqeewewew",
+      "sentAt": "August 9th 2023, 4:13:43 pm",
       "id": 5
+    },
+    {
+      "title": "aADSDSDD",
+      "description": "DSDSDSD",
+      "sentAt": "August 9th 2023, 5:12:21 pm",
+      "id": 6
+    },
+    {
+      "title": "addsds",
+      "description": "dsdsdsds",
+      "sentAt": "August 9th 2023, 5:40:18 pm",
+      "id": 7
     }
   ]
 }
