@@ -23,6 +23,7 @@ import {
   // flexRender,
 } from "@tanstack/react-table";
 import MessageListing from "../MessageListing/MessageListing";
+import { EditModal } from "../EditModal";
 
 const Admin = () => {
   // const columnHelper = createColumnHelper();
@@ -58,6 +59,7 @@ const Admin = () => {
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [messages, setMessages] = useState([]);
+  const [TotalMessages, setTotalMessages] = useState([]);
   const [notificationCount, setNotificationCount] = useState(0);
   const [show, setShow] = useState(false);
   const closeHandler = () => {
@@ -97,6 +99,7 @@ const Admin = () => {
         console.log("🚀 ~ file: Admin.jsx:23 ~ .then ~ data:", TotelData);
         if (TotelData != undefined) {
           setMessages(TotelData);
+          setTotalMessages(TotelData);
         }
       })
       .catch((e) => {
@@ -119,6 +122,7 @@ const Admin = () => {
       }
 
       setMessages((prevMessages) => [...prevMessages, data]);
+      setTotalMessages((prevMessages) => [...prevMessages, data]);
       setNotificationCount((prevCount) => prevCount + 1);
     });
 
@@ -190,14 +194,17 @@ const Admin = () => {
     {
       header: "#",
       accessorKey: "id",
+      id: "id",
     },
     {
       header: "TITLE",
       accessorKey: "title",
+      id: "title",
     },
     {
       header: "DESCRIPTION",
       accessorKey: "description",
+      id: "description",
     },
     {
       header: "AT",
@@ -297,7 +304,16 @@ const Admin = () => {
           ? "Admin 5"
           : "Admin"}
       </h3> */}
-      <MessageListing allMessages={allMessages} data={data} />
+      <MessageListing
+        allMessages={allMessages}
+        data={data}
+        messages={messages}
+        setMessages={setMessages}
+        TotalMessages={TotalMessages}
+        globalFilter={globalFilter}
+        setGlobalFilter={setColumnFilters}
+        columns={columns}
+      />
       <ToastContainer />
       <Offcanvas show={show} onHide={handleClose} placement="end">
         <Offcanvas.Header closeButton>
@@ -317,10 +333,10 @@ const Admin = () => {
         </Offcanvas.Body>
       </Offcanvas>
 
-      <Offcanvas show={showEditModal} onHide={closeHandler} placement="end">
+      {/* <Offcanvas show={showEditModal} onHide={closeHandler} placement="end">
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>
-            {/* {current.id === 1
+            {current.id === 1
               ? "Admin 1"
               : current.id === 2
               ? "Admin 2"
@@ -330,7 +346,7 @@ const Admin = () => {
               ? "Admin 4"
               : current.id === 5
               ? "Admin 5"
-              : "Admin"} */}
+              : "Admin"}
           </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
@@ -377,7 +393,15 @@ const Admin = () => {
             </Button>
           </Form>
         </Offcanvas.Body>
-      </Offcanvas>
+      </Offcanvas> */}
+      <EditModal
+        showEditModal={showEditModal}
+        closeHandler={closeHandler}
+        handleSubmit={handleSubmit}
+        submitHandler={submitHandler}
+        register={register}
+        errors={errors}
+      />
     </>
   );
 };

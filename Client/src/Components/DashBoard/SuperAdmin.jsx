@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // import React, { useState } from "react";
 import { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
@@ -6,16 +7,25 @@ import io from "socket.io-client";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
-import { notificationAPI } from "../API/API";
+import { EditById, allAdmins, notificationAPI } from "../API/API";
 import DataTable from "../DataTable/DataTable";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { messageSchema } from "../Schema/Schema";
 import moment from "moment";
+import { useParams } from "react-router-dom";
+import { EditFromSuper } from "../EditFromSuper";
 
 export const socket = io.connect("http://localhost:5175");
 
 const SuperAdmin = () => {
+  const [showEditModal, setShowEditModal] = useState(false);
+  const params = useParams();
+  const [selectedAdmin, setSelectedAdmin] = useState(null);
+
+  console.log("🚀 ~ file: SuperAdmin.jsx:24 ~ SuperAdmin ~ params:", params);
+  // const current = JSON.parse(localStorage.getItem(params.id + "__onLogin"));
+
   const {
     handleSubmit,
     register,
@@ -26,6 +36,15 @@ const SuperAdmin = () => {
     mode: "onChange",
     resolver: yupResolver(messageSchema),
   });
+  const closeHandler = () => {
+    setShowEditModal(false);
+    // window.location.reload();
+  };
+
+  const showHandler = (admin) => {
+    setShowEditModal(true);
+    setSelectedAdmin(admin);
+  };
   // const [messageTitle, setMessageTitle] = useState("");
   // const [messageDescription, setMessageDescription] = useState("");
   // const [titleError, setTitleError] = useState("");
@@ -54,7 +73,8 @@ const SuperAdmin = () => {
   // Adding a new key to the form data
 
   const sendMessage = (data, event) => {
-    const currentTime = moment().format("MMMM Do YYYY, h:mm:ss a");
+    console.log("🚀 ~ file: SuperAdmin.jsx:71 ~ sendMessage ~ data:", data);
+    const currentTime = moment().format("MMMM Do YYYY");
     event.preventDefault();
     setValue("sentAt", currentTime);
 
@@ -72,29 +92,98 @@ const SuperAdmin = () => {
       closeOnClick: true,
       theme: "light",
     });
-    // Email.send({
-    //   SecureToken: "a971eb7f-5f97-4762-a0dc-2484e24509a4",
-    //   To: "testwings121221@gmail.com",
-    //   From: "testwings121221@gmail.com",
-    //   Subject: data.title,
-    //   Body: data.description,
-    // }).then((message) => {
-    //   console.log(message);
-    //   alert(message);
-    // });
     reset();
+
+    // allAdmins().then((admins) => {
+    //   const trueStatusAdmins = admins.filter((admin) => admin.status === true);
+    //   trueStatusAdmins.forEach((admin) => {
+    //     console.log(
+    //       "🚀 ~ file: SuperAdmin.jsx:94 ~ trueStatusAdmins.forEach ~ admin:",
+    //       admin
+    //     );
+    //     Email.send({
+    //       SecureToken: "a971eb7f-5f97-4762-a0dc-2484e24509a4",
+    //       To: admin.email,
+    //       From: "testwings121221@gmail.com",
+    //       Subject: data.title,
+    //       Body: data.description,
+    //     }).then((message) => {
+    //       console.log(message);
+    //       alert(message);
+    //     });
+    //   });
+    // });
   };
 
   const clearHandler = () => {
     reset();
   };
+
+  // const submitHandler = (data, event) => {
+  //   event.preventDefault();
+
+  //   const userId = current.id;
+  //   console.log(
+  //     "🚀 ~ file: SuperAdmin.jsx:110 ~ submitHandler ~ userId:",
+  //     userId
+  //   );
+  //   const updatedData = { ...current, ...data };
+  //   console.log(
+  //     "🚀 ~ file: Admin.jsx:119 ~ submitHandler ~ updatedData:",
+  //     updatedData
+  //   );
+
+  //   allAdmins()
+  //     .then((admin) => {
+  //       console.log("🚀 ~ file: Admin.jsx:122 ~ .then ~ admin:", admin);
+  //       const isEmailUnique = admin.every(
+  //         (adminData) =>
+  //           adminData.id === userId ||
+  //           (adminData.email !== updatedData.email &&
+  //             adminData.firstname !== updatedData.firstname &&
+  //             adminData.lastname !== updatedData.lastname)
+  //       );
+
+  //       if (!isEmailUnique) {
+  //         toast.error("something is already exists for another admin.", {
+  //           position: "top-center",
+  //           autoClose: 3000,
+  //           closeOnClick: true,
+  //           theme: "light",
+  //         });
+  //         return;
+  //       }
+  //       localStorage.setItem(
+  //         params.id + "__onLogin",
+  //         JSON.stringify(updatedData)
+  //       );
+  //       toast.success("You Data Is Updated", {
+  //         position: "top-center",
+  //         autoClose: 3000,
+  //         closeOnClick: true,
+  //         theme: "light",
+  //       });
+
+  //       EditById(userId, updatedData)
+  //         .then((res) => {
+  //           console.log("Updated data:", res);
+  //         })
+  //         .catch((err) => {
+  //           console.error("Error updating data:", err);
+  //         });
+  //       closeHandler();
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching admin data:", error);
+  //     });
+  // };
   return (
     <>
       <Link className="d-flex justify-content-end" to="/logout" reloadDocument>
         <Button className="btn-light"> Logout</Button>
       </Link>
-      <div style={{ display: "flex" }}>
-        <div style={{ width: "40%", margin: "auto 0" }}>
+      <div className="d-flex">
+        <div style={{ margin: "auto 0" }}>
           <h1 style={{ color: "white" }}>SuperAdmin</h1>
           <ToastContainer />
           <Form
@@ -143,11 +232,19 @@ const SuperAdmin = () => {
         </div>
         <div style={{ width: "50%", margin: "80px 0 0 0" }}>
           <DataTable
-          // selectedAdmins={selectedAdmins}
-          // setSelectedAdmins={setSelectedAdmins}
+            // selectedAdmins={selectedAdmins}
+            // setSelectedAdmins={setSelectedAdmins}
+            showHandler={showHandler}
+            // submitHandler={submitHandler}
           />
         </div>
       </div>
+      <EditFromSuper
+        selectedAdmin={selectedAdmin}
+        // submitHandler={submitHandler}
+        showEditModal={showEditModal}
+        closeHandler={closeHandler}
+      />
     </>
   );
 };

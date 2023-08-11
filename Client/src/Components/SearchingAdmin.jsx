@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 
-export default function Searching({
+export default function SearchingAdmin({
   value: initialValue,
   onChange,
   debounce = 500,
   columns,
-  TotalAdmins,
+  allMessages,
   ...props
 }) {
   const [value, setValue] = useState(initialValue);
@@ -34,10 +34,9 @@ export default function Searching({
           {...props}
           style={{
             display: "flex",
-            margin: "10px auto",
-            width: "140px",
-            padding: "5px",
-            borderRadius: " 8px",
+            marginRight: "100px",
+            marginTop: "10px",
+            width: "90px",
           }}
           value={value}
           onChange={(e) => setValue(e.target.value)}

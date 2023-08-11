@@ -9,16 +9,16 @@
     {
       "firstname": "admina",
       "lastname": "adminn",
-      "email": "admin1@gmail.com",
+      "email": "admin1@yopmail.com",
       "password": "admin111",
       "role": "admin",
-      "status": true,
+      "status": false,
       "id": 1
     },
     {
       "firstname": "second admin",
       "lastname": "devanshu",
-      "email": "admin2@gmail.com",
+      "email": "admin2@yopmail.com",
       "password": "admin222",
       "role": "admin",
       "status": false,
@@ -27,7 +27,7 @@
     {
       "firstname": "third admin",
       "lastname": "mayank",
-      "email": "admin3@gmail.com",
+      "email": "admin3@yopmail.com",
       "password": "admin333",
       "role": "admin",
       "status": false,
@@ -36,7 +36,7 @@
     {
       "firstname": "fourth admin",
       "lastname": "mahendra",
-      "email": "admin4@gmail.com",
+      "email": "admin4@yopmail.com",
       "password": "admin444",
       "role": "admin",
       "status": false,
@@ -45,7 +45,7 @@
     {
       "firstname": "fifth admin",
       "lastname": "chirag",
-      "email": "admin5@gmail.com",
+      "email": "admin5@yopmail.com",
       "password": "admin555",
       "role": "admin",
       "status": false,
@@ -54,46 +54,70 @@
   ],
   "notification": [
     {
-      "title": "hello everyone",
-      "description": "hello, i am yash bhatt",
-      "sentAt": "August 9th 2023, 4:05:32 pm",
+      "title": "yash bhatt",
+      "description": "yash bhatt",
+      "sentAt": "August 10th 2023",
       "id": 1
     },
     {
-      "title": "yasg",
-      "description": "fsdfdsfdfd",
-      "sentAt": "August 9th 2023, 4:06:45 pm",
+      "title": "yash bhatt",
+      "description": "yash bhatt",
+      "sentAt": "August 10th 2023",
       "id": 2
     },
     {
-      "title": "yankdlsdkd",
-      "description": "dsdsadadasds",
-      "sentAt": "August 9th 2023, 4:09:14 pm",
+      "title": "yash bhatt",
+      "description": "yash bhatt",
+      "sentAt": "August 10th 2023",
       "id": 3
     },
     {
-      "title": "fdsffd",
-      "description": "fdfdfd",
-      "sentAt": "August 9th 2023, 4:11:20 pm",
+      "title": "bahtt",
+      "description": "bhattdd",
+      "sentAt": "August 11th 2023",
       "id": 4
     },
     {
-      "title": "qewewewq",
-      "description": "ewqeewewew",
-      "sentAt": "August 9th 2023, 4:13:43 pm",
+      "title": "fgdgdfg",
+      "description": "gdfgdgfg",
+      "sentAt": "August 11th 2023",
       "id": 5
     },
     {
-      "title": "aADSDSDD",
-      "description": "DSDSDSD",
-      "sentAt": "August 9th 2023, 5:12:21 pm",
+      "title": "gfgfg",
+      "description": "fgfgfgfg",
+      "sentAt": "August 11th 2023",
       "id": 6
     },
     {
-      "title": "addsds",
-      "description": "dsdsdsds",
-      "sentAt": "August 9th 2023, 5:40:18 pm",
+      "title": "gfgfg",
+      "description": "gfgfgf",
+      "sentAt": "August 11th 2023",
       "id": 7
+    },
+    {
+      "title": "gfgfgf",
+      "description": "gfgfggf",
+      "sentAt": "August 11th 2023",
+      "id": 8
+    },
+    {
+      "title": "gfgfgf",
+      "description": "gfgfgggf",
+      "sentAt": "August 11th 2023",
+      "id": 9
+    },
+    {
+      "title": "gfgfg",
+      "description": "fgfgfgfgf",
+      "sentAt": "August 11th 2023",
+      "id": 10
+    },
+    {
+      "title": "gfgfgf",
+      "description": "gfgfgfgfg",
+      "sentAt": "August 11th 2023",
+      "id": 11
     }
   ]
 }

@@ -3,7 +3,7 @@ import { Button, Form, Table } from "react-bootstrap";
 import { allAdmins, updateStatus } from "../API/API";
 import up from "../../assets/up.png";
 import down from "../../assets/down.png";
-
+import { FilterColumns } from "../FilterColumns";
 import {
   createColumnHelper,
   useReactTable,
@@ -14,12 +14,13 @@ import {
   getFacetedMinMaxValues,
   getPaginationRowModel,
   getSortedRowModel,
+  sortingFns,
   flexRender,
 } from "@tanstack/react-table";
 import Searching from "../Searching/Searching";
-import { rankItem } from "@tanstack/match-sorter-utils";
+import { rankItem, compareItems } from "@tanstack/match-sorter-utils";
 
-const DataTable = () => {
+const DataTable = ({ showHandler }) => {
   const columnHelper = createColumnHelper();
 
   const [admins, setAdmins] = useState([]);
@@ -70,6 +71,21 @@ const DataTable = () => {
   //       });
   //   }
   // };
+  const fuzzySort = (rowA, rowB, columnId) => {
+    let dir = 0;
+
+    // Only sort by rank if the column has ranking information
+    if (rowA.columnFiltersMeta[columnId]) {
+      dir = compareItems(
+        rowA.columnFiltersMeta[columnId]?.itemRank,
+        rowB.columnFiltersMeta[columnId]?.itemRank
+      );
+    }
+
+    // Provide an alphanumeric fallback for when the item ranks are equal
+    return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir;
+  };
+
   const data = useMemo(() => filteredUsersData, [filteredUsersData]);
   console.log("🚀 ~ file: Admin.jsx:187 ~ Admin ~ data:", data);
 
@@ -80,23 +96,42 @@ const DataTable = () => {
     },
     {
       header: "First Name",
+      cell: (info) => info.getValue(),
       accessorKey: "firstname",
+      filterFn: "fuzzy",
+      id: "firstname",
+      sortingFn: fuzzySort,
+      // footer: (props) => props.columns.id,
     },
     {
       header: "Last Name",
       accessorKey: "lastname",
+      cell: (info) => info.getValue(),
+      filterFn: "fuzzy",
+      id: "lastname",
+      sortingFn: fuzzySort,
+      // footer: (props) => props.columns.id,
     },
     {
       header: "Email",
       accessorKey: "email",
+      cell: (info) => info.getValue(),
+      filterFn: "fuzzy",
+      sortingFn: fuzzySort,
+      id: "email",
+      // footer: (props) => props.columns.id,
     },
     {
       header: "Send To",
       accessorKey: "sendTo",
+
       enableSorting: false,
-      ...columnHelper.accessor((row) => row.isVerified, {
-        id: "sendto",
-        cell: () => {
+      id: "sendto",
+
+      ...columnHelper.accessor((row) => row.sendTo, {
+        cell: (info) => {
+          const data = info.row.original; // Get the entire row's data
+
           const handleToggleStatus = (id, currentStatus) => {
             const adminToUpdate = admins.find((admin) => admin.id === id);
 
@@ -138,8 +173,8 @@ const DataTable = () => {
           return (
             <Form.Check
               type="switch"
-              id={`custom-switch-`}
-              checked={data.status}
+              id={`custom-switch-${info.row.index}`}
+              checked={(data.id, data.status)}
               onChange={() =>
                 handleToggleStatus(
                   data.id,
@@ -156,6 +191,11 @@ const DataTable = () => {
     {
       header: "ACTIONS",
       accessorKey: "actions",
+      ...columnHelper.accessor((row) => row.actions, {
+        cell: (row) => (
+          <Button onClick={() => showHandler(row.row.original)}>Edit</Button>
+        ),
+      }),
     },
   ];
   function fuzzyFilter(row, columnId, value, addMeta) {
@@ -196,18 +236,28 @@ const DataTable = () => {
       sorting,
     },
   });
+  useEffect(() => {
+    if (TotalAdmins.getState().columnFilters[0]?.id === "fullName") {
+      if (TotalAdmins.getState().sorting[0]?.id !== "fullName") {
+        TotalAdmins.setSorting([{ id: "fullName", desc: false }]);
+      }
+    }
+  }, [TotalAdmins.getState().columnFilters[0]?.id]);
+
   return (
     <>
-      <Searching
-        value={globalFilter ?? ""}
-        onChange={(value) => setGlobalFilter(String(value))}
-        placeholder="Search all columns"
-        columns={columns}
-        TotalAdmins={TotalAdmins}
-      />
-      <Form.Label className="text-white">
+      <div style={{ marginLeft: "560px" }}>
+        <Searching
+          value={globalFilter ?? ""}
+          onChange={(value) => setGlobalFilter(String(value))}
+          placeholder="Search all columns"
+          columns={columns}
+          TotalAdmins={TotalAdmins}
+        />
+      </div>
+      <h5 className="text-white">
         <b>Send To</b>
-      </Form.Label>
+      </h5>
       <Table
         striped
         bordered
@@ -215,6 +265,7 @@ const DataTable = () => {
         variant="light"
         className=" overflow-auto  table-css mb-5 w-100 text-black bg-white"
         cellSpacing={0}
+        style={{ margin: "0 0 0 50px" }}
       >
         <thead>
           {TotalAdmins.getHeaderGroups()?.map((headerGroup) => (
@@ -234,19 +285,24 @@ const DataTable = () => {
                         header.column.columnDef.header,
                         header.getContext()
                       )}
-                      {header.column.getCanFilter() ? (
-                        <div>
-                          {/* <Filter column={header.column} reactTable={reactTable} /> */}
-                        </div>
-                      ) : null}
                       {data.length > 0
                         ? {
-                            asc: <img src={up} alt="Up Errow" width={10} />,
+                            asc: <img src={up} alt="Up Errow" width={11} />,
                             desc: (
-                              <img src={down} alt="Down Errow" width={10} />
+                              <img src={down} alt="Down Errow" width={11} />
                             ),
                           }[header.column.getIsSorted() ?? ""] || null
                         : ""}
+                      {(header.column.getCanFilter() &&
+                        header.id === "firstname") ||
+                      header.id === "lastname" ? (
+                        <div>
+                          <FilterColumns
+                            column={header.column}
+                            TotalAdmins={TotalAdmins}
+                          />
+                        </div>
+                      ) : null}
                     </div>
                   )}
                 </th>
