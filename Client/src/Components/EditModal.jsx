@@ -1,5 +1,7 @@
 import React from "react";
 import { Button, Form, Offcanvas } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export const EditModal = ({
   showEditModal,
@@ -9,6 +11,13 @@ export const EditModal = ({
   register,
   errors,
 }) => {
+  const navigate = useNavigate();
+  const params = useParams();
+
+  const goToTheGallery = () => {
+    navigate(`/gallery/${params.id}`);
+  };
+
   return (
     <>
       <Offcanvas show={showEditModal} onHide={closeHandler} placement="end">
@@ -68,6 +77,13 @@ export const EditModal = ({
               onClick={closeHandler}
             >
               Cancel
+            </Button>
+            <Button
+              variant="dark btn-bg"
+              onClick={goToTheGallery}
+              type="button"
+            >
+              Go to the Gallery
             </Button>
           </Form>
         </Offcanvas.Body>

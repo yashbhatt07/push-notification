@@ -19,13 +19,19 @@ import {
 } from "@tanstack/react-table";
 import Searching from "../Searching/Searching";
 import { rankItem, compareItems } from "@tanstack/match-sorter-utils";
+import { useNavigate } from "react-router-dom";
 
 const DataTable = ({ showHandler }) => {
   const columnHelper = createColumnHelper();
 
   const [admins, setAdmins] = useState([]);
   console.log("🚀 ~ file: DataTable.jsx:7 ~ DataTable ~ admins:", admins);
+  const navigate = useNavigate();
   localStorage.setItem("admins", JSON.stringify(admins));
+
+  const goToTheGallery = (id) => {
+    navigate(`/gallery/${id}`);
+  };
 
   useEffect(() => {
     const fetchAdmins = async () => {
@@ -130,8 +136,7 @@ const DataTable = ({ showHandler }) => {
 
       ...columnHelper.accessor((row) => row.sendTo, {
         cell: (info) => {
-          const data = info.row.original; // Get the entire row's data
-
+          const data = info.row.original;
           const handleToggleStatus = (id, currentStatus) => {
             const adminToUpdate = admins.find((admin) => admin.id === id);
 
@@ -189,11 +194,22 @@ const DataTable = ({ showHandler }) => {
       }),
     },
     {
-      header: "ACTIONS",
+      header: "Actions",
       accessorKey: "actions",
       ...columnHelper.accessor((row) => row.actions, {
         cell: (row) => (
           <Button onClick={() => showHandler(row.row.original)}>Edit</Button>
+        ),
+      }),
+    },
+    {
+      header: "Gallery",
+      accessorKey: "Gallery",
+      ...columnHelper.accessor((row) => row.gallery, {
+        cell: (row) => (
+          <Button onClick={() => goToTheGallery(row.row.original.id)}>
+            Gallery
+          </Button>
         ),
       }),
     },
@@ -295,7 +311,8 @@ const DataTable = ({ showHandler }) => {
                         : ""}
                       {(header.column.getCanFilter() &&
                         header.id === "firstname") ||
-                      header.id === "lastname" ? (
+                      header.id === "lastname" ||
+                      header.id === "email" ? (
                         <div>
                           <FilterColumns
                             column={header.column}

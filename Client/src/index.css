@@ -52,3 +52,47 @@ body {
   color: white;
   margin-top: 20px;
 }
+
+.drag-box {
+  margin-top: 200px !important;
+  border: solid 1px;
+  margin: 0 auto;
+
+  box-shadow: 0px 1px 14px 0px;
+  height: 130px;
+}
+.drag-box p {
+  margin: auto 0;
+}
+
+.drop-list li {
+  position: relative;
+  border: 1px solid #fff;
+}
+
+.drop-list {
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;
+  margin-top: 30px;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.drop-list li button {
+  position: absolute;
+  top: -11px;
+  right: -10px;
+  border-radius: 50%;
+  background-color: pink;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  border-radius: 50%;
+  background-color: pink;
+}
